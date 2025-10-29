@@ -32,9 +32,9 @@ exports.handler = async (event) => {
 
     const response = await mailerlite.subscribers.createOrUpdate(params);
     
-    // --- NEW DIAGNOSTIC LOG ---
-    // Let's log the entire successful response body to see its structure.
-    console.log('MailerLite Success Response Body:', JSON.stringify(response, null, 2));
+    // --- CORRECTED DIAGNOSTIC LOG ---
+    // Log only the 'data' part of the response to avoid circular structure errors.
+    console.log('MailerLite Success Response DATA:', JSON.stringify(response.data, null, 2));
 
     // Check for a successful response from the API
     if (response && response.data && response.data.id) {
@@ -43,8 +43,7 @@ exports.handler = async (event) => {
             body: JSON.stringify({ message: 'Success! You have been subscribed.' })
         };
     } else {
-        // This is the error that's being triggered.
-        throw new Error('Subscriber creation failed for an unknown reason.');
+        throw new Error('Subscriber creation failed because the API response was not in the expected format.');
     }
 
   } catch (error) {
