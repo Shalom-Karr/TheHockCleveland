@@ -244,9 +244,6 @@
                 volumeIcon.className = 'fas fa-volume-high';
                 unmutePrompt.style.opacity = 0;
                 console.log('Player successfully unmuted.');
-                // Clean up interaction listeners so they don't fire again.
-                window.removeEventListener('scroll', handleFirstInteraction);
-                window.removeEventListener('keydown', handleFirstInteraction);
                 window.removeEventListener('click', handleFirstInteraction);
             };
 
@@ -268,9 +265,6 @@
                 video.classList.add('loaded');
                 if (video.muted) unmutePrompt.style.opacity = 1;
                 
-                // Now that the video is playing, we can safely listen for interactions.
-                window.addEventListener('scroll', handleFirstInteraction, { once: true });
-                window.addEventListener('keydown', handleFirstInteraction, { once: true });
                 window.addEventListener('click', handleFirstInteraction, { once: true });
             });
 
