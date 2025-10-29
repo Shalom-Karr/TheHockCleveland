@@ -21,62 +21,36 @@
     
     <style>
         :root { --orange-glow: 0 0 15px rgba(249, 115, 22, 0.5), 0 0 30px rgba(249, 115, 22, 0.3); }
-        
-        /* GENERAL STYLES */
-        html.lenis { height: auto; }
-        .lenis.lenis-smooth { scroll-behavior: auto !important; }
-        .lenis.lenis-stopped { overflow: hidden; }
-        
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0a0a0a;
-            color: #e5e7eb;
-            cursor: none;
-        }
-
-        /* CUSTOM CURSOR */
+        body { font-family: 'Inter', sans-serif; background-color: #0a0a0a; color: #e5e7eb; cursor: none; }
         .cursor { position: fixed; width: 20px; height: 20px; border-radius: 50%; background-color: white; mix-blend-mode: difference; pointer-events: none; transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s; z-index: 9999; }
         .cursor.hovered { width: 50px; height: 50px; background-color: transparent; border: 2px solid white; }
         .cursor-dot { position: fixed; width: 4px; height: 4px; background-color: white; border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); z-index: 9999; }
         @media (max-width: 1024px) { .cursor, .cursor-dot { display: none; } body { cursor: auto; } }
-
-        /* HERO & VIDEO */
         .hero-video-container { position: relative; width: 100%; height: 85vh; overflow: hidden; }
-        .hero-video-container iframe {
-            position: absolute; top: 50%; left: 50%; width: 100%; height: 100%; transform: translate(-50%, -50%);
-            pointer-events: none; z-index: 1; opacity: 0; transition: opacity 1s ease-in-out;
-        }
+        .hero-video-container iframe { position: absolute; top: 50%; left: 50%; width: 100%; height: 100%; transform: translate(-50%, -50%); pointer-events: none; z-index: 1; opacity: 0; transition: opacity 1s ease-in-out; }
         @media (min-aspect-ratio: 16/9) { .hero-video-container iframe { height: 56.25vw; } }
         @media (max-aspect-ratio: 16/9) { .hero-video-container iframe { width: 177.78vh; } }
         .hero-video-container iframe.loaded { opacity: 1; }
-
-        /* HEADER */
         .glass-header { background: rgba(10, 10, 10, 0.6); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
         @media (max-width: 1024px) { .mobile-header.header-hidden { transform: translateY(-100%); } }
-
-        /* 3D TILT CARDS */
         .tilt-card { background: rgba(23, 23, 23, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); transform-style: preserve-3d; transition: transform 0.5s, box-shadow 0.5s; }
         .tilt-card-content { transform: translateZ(40px); }
         .tilt-card .card-icon { transition: transform 0.3s ease; }
         .tilt-card:hover .card-icon { transform: scale(1.15) rotate(-5deg); }
-
-        /* SCROLLING TESTIMONIALS */
         #testimonials { overflow: hidden; }
         .testimonial-track { display: flex; width: 300%; }
         .testimonial-card { width: 100%; flex-shrink: 0; }
-
-        /* AURORA BACKGROUND */
         .aurora-bg { position: relative; overflow: hidden; }
         .aurora-bg::before, .aurora-bg::after { content: ''; position: absolute; width: 800px; height: 800px; border-radius: 50%; filter: blur(150px); opacity: 0.15; z-index: 0; animation: drift 20s infinite alternate linear; }
         .aurora-bg::before { background: radial-gradient(circle, #f97316, transparent 60%); top: -20%; left: -20%; }
         .aurora-bg::after { background: radial-gradient(circle, #22c55e, transparent 60%); bottom: -20%; right: -20%; animation-delay: -10s; }
         @keyframes drift { from { transform: rotate(0deg) translateX(50px) translateY(20px); } to { transform: rotate(360deg) translateX(-50px) translateY(-20px); } }
-
-        /* SCROLL DOWN INDICATOR */
         .scroll-down { position: absolute; bottom: 1.5rem; left: 50%; transform: translateX(-50%); z-index: 20; }
         .mouse { width: 25px; height: 45px; border: 2px solid white; border-radius: 60px; position: relative; }
         .mouse::before { content: ''; width: 6px; height: 6px; position: absolute; top: 8px; left: 50%; transform: translateX(-50%); background-color: white; border-radius: 50%; opacity: 1; animation: wheel 2s infinite; }
         @keyframes wheel { to { opacity: 0; top: 25px; } }
+        #unmute-prompt { transition: opacity 0.5s ease-in-out; animation: pulse 2s infinite cubic-bezier(0.4, 0, 0.6, 1); }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.6; } }
     </style>
 </head>
 <body class="antialiased">
@@ -87,7 +61,7 @@
     <header id="header" class="glass-header mobile-header fixed lg:sticky top-0 left-0 right-0 z-50 transition-all duration-300">
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
-                <a href="#" class="flex items-center gap-3 group">
+                <a href="index.html" class="flex items-center gap-3 group">
                     <img src="https://thehockcleveland.myiqsolutionsllp.in/wp-content/uploads/2025/07/1000294271-e1760881282982.png" alt="Logo" class="h-16 w-16 bg-orange-500 rounded-full p-1 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
                     <div class="hidden sm:block">
                         <span class="text-xl font-bold text-gray-100">The Hock</span>
@@ -96,7 +70,8 @@
                 </a>
                 <nav class="hidden lg:flex items-center gap-6">
                     <a href="#about" class="text-gray-300 hover:text-white transition-colors font-medium">About</a>
-                    <a href="https://thehockcleveland.myiqsolutionsllp.in/sheimos-information/" class="text-gray-300 hover:text-white transition-colors font-medium">Sheimos Info</a>
+                    <!-- UPDATED LINK -->
+                    <a href="sheimos.html" class="text-gray-300 hover:text-white transition-colors font-medium">Sheimos Info</a>
                     <a href="#advertise" class="text-gray-300 hover:text-white transition-colors font-medium">Advertise</a>
                 </nav>
                 <div class="flex items-center gap-3">
@@ -115,7 +90,7 @@
         <div id="mobile-menu" class="hidden lg:hidden bg-gray-900/95 backdrop-blur-sm absolute top-full left-0 w-full border-t border-white/10">
             <nav class="flex flex-col p-4 gap-2">
                 <a href="#about" class="text-gray-300 hover:bg-white/5 rounded-md py-2 px-3">About & Subscribe</a>
-                <a href="https://thehockcleveland.myiqsolutionsllp.in/sheimos-information/" class="text-gray-300 hover:bg-white/5 rounded-md py-2 px-3">Sheimos Info</a>
+                <a href="sheimos.html" class="text-gray-300 hover:bg-white/5 rounded-md py-2 px-3">Sheimos Info</a>
                 <a href="#advertise" class="text-gray-300 hover:bg-white/5 rounded-md py-2 px-3">Advertise</a>
                 <a href="https://wa.me/8186299732?text=Hi!%20I%20would%20like%20to%20join%20the%20status" target="_blank" class="w-full text-center bg-green-500 text-white font-semibold px-4 py-2.5 rounded-full mt-2 sm:hidden">
                     Join on WhatsApp
@@ -128,14 +103,15 @@
         <section class="hero-video-container">
             <div id="video-parallax-bg" class="absolute inset-0">
                 <img src="https://vumbnail.com/1122092442.jpg" alt="Cleveland skyline background" id="video-poster" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 z-10">
-                <!-- REVERTED 1: Start muted to comply with browser autoplay policy -->
                 <iframe id="hero-vimeo-video" src="https://player.vimeo.com/video/1122092442?background=1&autoplay=1&loop=1&byline=0&title=0&muted=1" frameborder="0" allow="autoplay; fullscreen" allowfullscreen></iframe>
             </div>
             <div class="absolute inset-0 bg-black/70 z-10"></div>
             
-            <!-- REVERTED 2: Initial icon is fa-volume-mute -->
-            <button id="volume-toggle" class="absolute bottom-5 right-5 z-20 w-12 h-12 flex items-center justify-center bg-white/10 border border-white/20 rounded-full text-white hover:bg-white/20 transition-all" aria-label="Toggle sound"><i id="volume-icon" class="fas fa-volume-mute"></i></button>
-            
+            <div class="absolute bottom-5 right-5 z-20 flex items-center gap-3">
+                <p id="unmute-prompt" class="text-xs text-white/50 hidden md:block opacity-0">Scroll or click to unmute</p>
+                <button id="volume-toggle" class="w-12 h-12 flex items-center justify-center bg-white/10 border border-white/20 rounded-full text-white hover:bg-white/20 transition-all" aria-label="Toggle sound"><i id="volume-icon" class="fas fa-volume-mute"></i></button>
+            </div>
+
             <div id="hero-content" class="relative z-20 flex flex-col items-center justify-center h-full text-center text-white px-4">
                 <h1 class="text-4xl sm:text-5xl md:text-7xl font-extrabold leading-tight">Want to be in on <span class="text-orange-400">The Hock</span> in Cleveland?</h1>
                 <p class="mt-6 text-lg md:text-xl max-w-3xl text-gray-200">Join by email for our weekly blast or get daily updates on Shua's Status by WhatsApp.</p>
@@ -147,6 +123,7 @@
             <div class="scroll-down"><div class="mouse"></div></div>
         </section>
 
+        <!-- Main page content remains here -->
         <section id="why-join" class="py-24 lg:py-32 aurora-bg">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div class="text-center mb-16">
@@ -245,152 +222,59 @@
             // --- MOBILE MENU TOGGLE ---
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
-            const mobileLinks = mobileMenu.querySelectorAll('a');
             mobileMenuButton.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
-            mobileLinks.forEach(link => link.addEventListener('click', () => mobileMenu.classList.add('hidden')));
-
-            // --- HEADER SCROLL EFFECT (Mobile Only Hide/Show) ---
-            let lastScroll = 0;
-            const header = document.getElementById('header');
-            window.addEventListener('scroll', () => {
-                if (window.innerWidth <= 1024) {
-                    const currentScroll = window.pageYOffset;
-                    if (currentScroll > lastScroll && currentScroll > header.offsetHeight) { header.classList.add('header-hidden'); } 
-                    else { header.classList.remove('header-hidden'); }
-                    lastScroll = currentScroll <= 0 ? 0 : currentScroll;
-                }
-            });
             
-            // --- CUSTOM CURSOR ---
-            if (window.innerWidth > 1024) {
-                const cursor = document.querySelector('.cursor');
-                const cursorDot = document.querySelector('.cursor-dot');
-                const hoverables = document.querySelectorAll('a, button, [data-tilt]');
-                window.addEventListener('mousemove', e => {
-                    gsap.to(cursor, { duration: 0.5, x: e.clientX, y: e.clientY, ease: 'power2.out' });
-                    gsap.to(cursorDot, { duration: 0.1, x: e.clientX, y: e.clientY });
-                });
-                hoverables.forEach(el => {
-                    el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
-                    el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
-                });
-            }
-
             // --- VIMEO VIDEO & SOUND CONTROL ---
             const iframe = document.querySelector('#hero-vimeo-video');
             const player = new Vimeo.Player(iframe);
             const poster = document.getElementById('video-poster');
             const volumeButton = document.getElementById('volume-toggle');
             const volumeIcon = document.getElementById('volume-icon');
-            // REVERTED 3: isMuted starts as true
+            const unmutePrompt = document.getElementById('unmute-prompt');
             let isMuted = true;
-            
-            player.on('play', () => { poster.style.opacity = '0'; iframe.classList.add('loaded'); });
-            player.getPlayed().then(played => { if (played.length > 0) { poster.style.opacity = '0'; iframe.classList.add('loaded'); }});
             
             // Manual volume toggle button
             volumeButton.addEventListener('click', () => {
                 isMuted = !isMuted;
                 player.setMuted(isMuted);
                 volumeIcon.className = `fas ${isMuted ? 'fa-volume-mute' : 'fa-volume-high'}`;
+                unmutePrompt.style.opacity = 0;
             });
-
-            // --- NEW: AUTO-UNMUTE ON FIRST INTERACTION ---
-            let hasInteracted = false;
+            
+            // AUTO-UNMUTE LOGIC
             const handleFirstInteraction = () => {
-                // If we've already interacted, or the user manually unmuted, do nothing.
-                if (hasInteracted || !isMuted) {
-                    // Remove listeners to clean up
-                    window.removeEventListener('scroll', handleFirstInteraction);
-                    window.removeEventListener('click', handleFirstInteraction);
-                    window.removeEventListener('keydown', handleFirstInteraction);
-                    return;
-                }
-                
-                hasInteracted = true;
+                if (!isMuted) return; // Already unmuted
                 
                 player.setVolume(1).then(() => {
                     isMuted = false;
                     volumeIcon.className = 'fas fa-volume-high';
-                    console.log('Video unmuted on first user interaction.');
-                }).catch(error => {
-                    console.error("Autoplay with sound was blocked by the browser.", error);
-                });
+                    unmutePrompt.style.opacity = 0;
+                }).catch(error => console.error(error));
             };
 
-            // Listen for any of these events to trigger the unmute
-            window.addEventListener('scroll', handleFirstInteraction);
-            window.addEventListener('click', handleFirstInteraction);
-            window.addEventListener('keydown', handleFirstInteraction);
-
-
-            // --- 3D TILT CARDS ---
-            VanillaTilt.init(document.querySelectorAll(".tilt-card"), { max: 10, speed: 400, glare: true, "max-glare": 0.1 });
-
-            // --- GSAP ANIMATIONS ---
-            gsap.to("#video-parallax-bg", { scrollTrigger: { trigger: ".hero-video-container", start: "top top", end: "bottom top", scrub: 1 }, yPercent: 20, scale: 1.1 });
-            gsap.to("#hero-content, #volume-toggle, .scroll-down", { scrollTrigger: { trigger: ".hero-video-container", start: "top top", end: "bottom top", scrub: 1 }, yPercent: 50, opacity: 0 });
-
-            // --- GSAP SCROLLING TESTIMONIALS (FASTER) ---
-            gsap.to(".testimonial-track", {
-                xPercent: -66.66,
-                ease: "none",
-                scrollTrigger: {
-                    trigger: "#testimonials",
-                    start: "top top",
-                    end: "+=1000",
-                    scrub: 1,
-                    pin: true,
-                }
-            });
-
-            const sections = document.querySelectorAll('section:not(.hero-video-container):not(#testimonials)');
-            sections.forEach(section => {
-                gsap.from(section.children, {
-                    scrollTrigger: { trigger: section, start: "top 80%", toggleActions: "play none none none" },
-                    opacity: 0, y: 50, duration: 1, stagger: 0.2, ease: 'power3.out'
-                });
-            });
-
-            // --- GSAP COUNTER ANIMATION ---
-            document.querySelectorAll('.counter').forEach(counter => {
-                const target = +counter.getAttribute('data-target');
-                let counterObj = { value: 0 };
-                ScrollTrigger.create({
-                    trigger: counter, start: "top 85%", once: true,
-                    onEnter: () => {
-                        gsap.to(counterObj, {
-                            duration: 2, value: target, ease: 'power2.out',
-                            onUpdate: () => { counter.textContent = Math.ceil(counterObj.value); }
-                        });
-                    }
-                });
-            });
-            
-            // --- FORM SUBMISSION ---
-            const form = document.getElementById('subscribe-form');
-            form.addEventListener('submit', function(e) {
-                e.preventDefault();
-                const email = form.querySelector('input[type="email"]').value;
-                const buttonText = form.querySelector('.button-text');
-                const buttonLoader = form.querySelector('.button-loader');
-                const feedback = document.getElementById('form-feedback');
+            player.on('play', () => { 
+                poster.style.opacity = '0'; 
+                iframe.classList.add('loaded');
+                if (isMuted) unmutePrompt.style.opacity = 1;
                 
-                buttonText.classList.add('hidden');
-                buttonLoader.classList.remove('hidden');
-                feedback.textContent = '';
-                setTimeout(() => {
-                    buttonText.classList.remove('hidden');
-                    buttonLoader.classList.add('hidden');
-                    if (email && email.includes('@')) {
-                        feedback.innerHTML = '<span class="text-green-400"><i class="fas fa-check-circle mr-2"></i>Success! Welcome aboard.</span>';
-                        form.reset();
-                    } else {
-                        feedback.innerHTML = '<span class="text-red-400"><i class="fas fa-exclamation-circle mr-2"></i>Please enter a valid email.</span>';
-                    }
-                    setTimeout(() => feedback.textContent = '', 5000);
-                }, 1500);
+                // REFINED LOGIC: Only start listening for interaction AFTER video plays
+                window.addEventListener('scroll', handleFirstInteraction, { once: true });
+                window.addEventListener('click', handleFirstInteraction, { once: true });
+                window.addEventListener('keydown', handleFirstInteraction, { once: true });
             });
+
+            // (The rest of the JS is identical to sheimos.html for consistency)
+            let lastScroll = 0;
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => { if (window.innerWidth <= 1024) { const currentScroll = window.pageYOffset; if (currentScroll > lastScroll && currentScroll > header.offsetHeight) { header.classList.add('header-hidden'); } else { header.classList.remove('header-hidden'); } lastScroll = currentScroll <= 0 ? 0 : currentScroll; } });
+            if (window.innerWidth > 1024) { const cursor = document.querySelector('.cursor'); const cursorDot = document.querySelector('.cursor-dot'); const hoverables = document.querySelectorAll('a, button, [data-tilt]'); window.addEventListener('mousemove', e => { gsap.to(cursor, { duration: 0.5, x: e.clientX, y: e.clientY, ease: 'power2.out' }); gsap.to(cursorDot, { duration: 0.1, x: e.clientX, y: e.clientY }); }); hoverables.forEach(el => { el.addEventListener('mouseenter', () => cursor.classList.add('hovered')); el.addEventListener('mouseleave', () => cursor.classList.remove('hovered')); }); }
+            VanillaTilt.init(document.querySelectorAll(".tilt-card"), { max: 10, speed: 400, glare: true, "max-glare": 0.1 });
+            gsap.to("#video-parallax-bg", { scrollTrigger: { trigger: ".hero-video-container", start: "top top", end: "bottom top", scrub: 1 }, yPercent: 20, scale: 1.1 });
+            gsap.to("#hero-content, .absolute.bottom-5, .scroll-down", { scrollTrigger: { trigger: ".hero-video-container", start: "top top", end: "bottom top", scrub: 1 }, yPercent: 50, opacity: 0 });
+            gsap.to(".testimonial-track", { xPercent: -66.66, ease: "none", scrollTrigger: { trigger: "#testimonials", start: "top top", end: "+=1000", scrub: 1, pin: true, } });
+            const sections = document.querySelectorAll('section:not(.hero-video-container):not(#testimonials)'); sections.forEach(section => { gsap.from(section.children, { scrollTrigger: { trigger: section, start: "top 80%", toggleActions: "play none none none" }, opacity: 0, y: 50, duration: 1, stagger: 0.2, ease: 'power3.out' }); });
+            document.querySelectorAll('.counter').forEach(counter => { const target = +counter.getAttribute('data-target'); let counterObj = { value: 0 }; ScrollTrigger.create({ trigger: counter, start: "top 85%", once: true, onEnter: () => { gsap.to(counterObj, { duration: 2, value: target, ease: 'power2.out', onUpdate: () => { counter.textContent = Math.ceil(counterObj.value); } }); } }); });
+            const form = document.getElementById('subscribe-form'); form.addEventListener('submit', function(e) { e.preventDefault(); const email = form.querySelector('input[type="email"]').value; const buttonText = form.querySelector('.button-text'); const buttonLoader = form.querySelector('.button-loader'); const feedback = document.getElementById('form-feedback'); buttonText.classList.add('hidden'); buttonLoader.classList.remove('hidden'); feedback.textContent = ''; setTimeout(() => { buttonText.classList.remove('hidden'); buttonLoader.classList.add('hidden'); if (email && email.includes('@')) { feedback.innerHTML = '<span class="text-green-400"><i class="fas fa-check-circle mr-2"></i>Success!</span>'; form.reset(); } else { feedback.innerHTML = '<span class="text-red-400"><i class="fas fa-exclamation-circle mr-2"></i>Invalid email.</span>'; } setTimeout(() => feedback.textContent = '', 5000); }, 1500); });
         });
     </script>
 </body>
