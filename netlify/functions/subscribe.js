@@ -32,18 +32,17 @@ exports.handler = async (event) => {
 
     const response = await mailerlite.subscribers.createOrUpdate(params);
     
-    // --- CORRECTED DIAGNOSTIC LOG ---
-    // Log only the 'data' part of the response to avoid circular structure errors.
-    console.log('MailerLite Success Response DATA:', JSON.stringify(response.data, null, 2));
-
-    // Check for a successful response from the API
-    if (response && response.data && response.data.id) {
+    // --- THE FINAL FIX ---
+    // The SDK response has a nested structure. The actual subscriber data is in `response.data.data`.
+    if (response && response.data && response.data.data && response.data.data.id) {
         return {
             statusCode: 200,
             body: JSON.stringify({ message: 'Success! You have been subscribed.' })
         };
     } else {
-        throw new Error('Subscriber creation failed because the API response was not in the expected format.');
+        // We can now remove the diagnostic log as we have solved the issue.
+        console.error('Unexpected API Response Structure:', response);
+        throw new Error('Subscriber creation failed due to an unexpected API response format.');
     }
 
   } catch (error) {
