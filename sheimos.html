@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-US"> <!-- REMOVED class="scroll-smooth" -->
+<html lang="en-US">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -18,12 +18,9 @@
     
     <style>
         :root { --orange-glow: 0 0 15px rgba(249, 115, 22, 0.5), 0 0 30px rgba(249, 115, 22, 0.3); }
-        
-        /* GENERAL STYLES */
         html.lenis { height: auto; }
         .lenis.lenis-smooth { scroll-behavior: auto !important; }
         .lenis.lenis-stopped { overflow: hidden; }
-        
         body { font-family: 'Inter', sans-serif; background-color: #0a0a0a; color: #e5e7eb; cursor: none; }
         .cursor { position: fixed; width: 20px; height: 20px; border-radius: 50%; background-color: white; mix-blend-mode: difference; pointer-events: none; transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s; z-index: 9999; }
         .cursor.hovered { width: 50px; height: 50px; background-color: transparent; border: 2px solid white; }
@@ -81,8 +78,6 @@
         <section class="aurora-bg py-24 lg:py-32">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <h1 class="text-4xl md:text-5xl font-bold text-center mb-16 text-orange-400">Sheimos Information</h1>
-
-                <!-- Content Block 1 -->
                 <div class="grid lg:grid-cols-2 gap-12 items-center mb-20">
                     <div>
                         <h2 class="text-2xl font-bold mb-4">Did you know that back in the day, they used a Gemara for hundreds of years?</h2>
@@ -92,10 +87,8 @@
                     </div>
                     <img src="https://thehockcleveland.com/wp-content/uploads/2025/10/1000221779.jpg" alt="Religious texts" class="rounded-lg shadow-lg w-full h-auto">
                 </div>
-
-                <!-- Content Block 2 -->
                 <div class="grid lg:grid-cols-2 gap-12 items-center mb-20">
-                    <div class="grid grid-cols-2 gap-4">
+                    <div class="grid grid-cols-2 gap-4 order-last lg:order-first">
                         <img src="https://thehockcleveland.com/wp-content/uploads/2025/10/1000221777-576x1024.jpg" alt="Sheimos burial process 1" class="rounded-lg shadow-lg w-full object-cover aspect-[9/16]">
                         <img src="https://thehockcleveland.com/wp-content/uploads/2025/10/1000221781-669x1024.jpg" alt="Sheimos burial process 2" class="rounded-lg shadow-lg w-full object-cover aspect-[9/16]">
                     </div>
@@ -109,8 +102,6 @@
                         </p>
                     </div>
                 </div>
-                
-                <!-- Content Block 3 -->
                 <div class="grid lg:grid-cols-2 gap-12 items-center">
                     <div>
                         <p class="text-lg text-gray-400 mb-6">
@@ -126,7 +117,6 @@
                         <img src="https://thehockcleveland.com/wp-content/uploads/2025/10/1000221778-576x1024.jpg" alt="Sheimos burial process 4" class="rounded-lg shadow-lg w-full object-cover aspect-[9/16]">
                     </div>
                 </div>
-
             </div>
         </section>
     </main>
@@ -141,41 +131,31 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // --- LENIS SMOOTH SCROLL (UPDATED SETTINGS) ---
-            const lenis = new Lenis({
-                duration: 1.2,
-                easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-                smooth: true,
-                mouseMultiplier: 1,
-                smoothTouch: false,
-            });
+            const lenis = new Lenis({ duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), smooth: true, mouseMultiplier: 1, smoothTouch: false, });
             function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
             requestAnimationFrame(raf);
 
-            // --- MOBILE MENU TOGGLE ---
             const mobileMenuButton = document.getElementById('mobile-menu-button');
             const mobileMenu = document.getElementById('mobile-menu');
             mobileMenuButton.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
 
-            // --- HEADER SCROLL EFFECT ---
+            // This script is identical to index.html, but the video-specific block will be skipped
+            // because `document.getElementById('hero-video')` will be null.
+            const video = document.getElementById('hero-video');
+            if (video) {
+                const volumeButton = document.getElementById('volume-toggle');
+                const volumeIcon = document.getElementById('volume-icon');
+                const unmutePrompt = document.getElementById('unmute-prompt');
+                const unmutePlayer = () => { if (!video.muted) return; video.muted = false; volumeIcon.className = 'fas fa-volume-high'; unmutePrompt.style.opacity = 0; console.log('Player successfully unmuted.'); window.removeEventListener('scroll', handleFirstInteraction); window.removeEventListener('keydown', handleFirstInteraction); window.removeEventListener('click', handleFirstInteraction); };
+                const handleFirstInteraction = () => unmutePlayer();
+                volumeButton.addEventListener('click', () => { if (video.muted) { unmutePlayer(); } else { video.muted = true; volumeIcon.className = 'fas fa-volume-mute'; } });
+                video.addEventListener('playing', () => { video.classList.add('loaded'); if (video.muted) unmutePrompt.style.opacity = 1; window.addEventListener('scroll', handleFirstInteraction, { once: true }); window.addEventListener('keydown', handleFirstInteraction, { once: true }); window.addEventListener('click', handleFirstInteraction, { once: true }); });
+            }
+
             let lastScroll = 0;
             const header = document.getElementById('header');
             window.addEventListener('scroll', () => { if (window.innerWidth <= 1024) { const currentScroll = window.pageYOffset; if (currentScroll > lastScroll && currentScroll > header.offsetHeight) { header.classList.add('header-hidden'); } else { header.classList.remove('header-hidden'); } lastScroll = currentScroll <= 0 ? 0 : currentScroll; } });
-
-            // --- CUSTOM CURSOR ---
-            if (window.innerWidth > 1024) {
-                const cursor = document.querySelector('.cursor');
-                const cursorDot = document.querySelector('.cursor-dot');
-                const hoverables = document.querySelectorAll('a, button');
-                window.addEventListener('mousemove', e => {
-                    gsap.to(cursor, { duration: 0.5, x: e.clientX, y: e.clientY, ease: 'power2.out' });
-                    gsap.to(cursorDot, { duration: 0.1, x: e.clientX, y: e.clientY });
-                });
-                hoverables.forEach(el => {
-                    el.addEventListener('mouseenter', () => cursor.classList.add('hovered'));
-                    el.addEventListener('mouseleave', () => cursor.classList.remove('hovered'));
-                });
-            }
+            if (window.innerWidth > 1024) { const cursor = document.querySelector('.cursor'); const cursorDot = document.querySelector('.cursor-dot'); const hoverables = document.querySelectorAll('a, button'); window.addEventListener('mousemove', e => { gsap.to(cursor, { duration: 0.5, x: e.clientX, y: e.clientY, ease: 'power2.out' }); gsap.to(cursorDot, { duration: 0.1, x: e.clientX, y: e.clientY }); }); hoverables.forEach(el => { el.addEventListener('mouseenter', () => cursor.classList.add('hovered')); el.addEventListener('mouseleave', () => cursor.classList.remove('hovered')); }); }
         });
     </script>
 </body>
