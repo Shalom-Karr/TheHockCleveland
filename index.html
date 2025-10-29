@@ -218,10 +218,8 @@
             const mobileMenu = document.getElementById('mobile-menu');
             mobileMenuButton.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
             
-            // --- SIMPLIFIED VIDEO & SOUND LOGIC ---
             const video = document.getElementById('hero-video');
             
-            // FIX: Check if video element exists before running video-specific code
             if (video) {
                 const volumeButton = document.getElementById('volume-toggle');
                 const volumeIcon = document.getElementById('volume-icon');
@@ -258,18 +256,96 @@
                 });
             }
 
-            // --- REST OF THE PAGE SCRIPT ---
             let lastScroll = 0;
             const header = document.getElementById('header');
             window.addEventListener('scroll', () => { if (window.innerWidth <= 1024) { const currentScroll = window.pageYOffset; if (currentScroll > lastScroll && currentScroll > header.offsetHeight) { header.classList.add('header-hidden'); } else { header.classList.remove('header-hidden'); } lastScroll = currentScroll <= 0 ? 0 : currentScroll; } });
-            if (window.innerWidth > 1024) { const cursor = document.querySelector('.cursor'); const cursorDot = document.querySelector('.cursor-dot'); const hoverables = document.querySelectorAll('a, button, [data-tilt]'); window.addEventListener('mousemove', e => { gsap.to(cursor, { duration: 0.5, x: e.clientX, y: e.clientY, ease: 'power2.out' }); gsap.to(cursorDot, { duration: 0.1, x: e.clientX, y: e.clientY }); }); hoverables.forEach(el => { el.addEventListener('mouseenter', () => cursor.classList.add('hovered')); el.addEventListener('mouseleave', () => cursor.classList.remove('hovered')); }); }
+            
+            if (window.innerWidth > 1024) { 
+                const cursor = document.querySelector('.cursor'); 
+                const cursorDot = document.querySelector('.cursor-dot'); 
+                const hoverables = document.querySelectorAll('a, button, [data-tilt]'); 
+                window.addEventListener('mousemove', e => { 
+                    gsap.to(cursor, { duration: 0.5, x: e.clientX, y: e.clientY, ease: 'power2.out' }); 
+                    gsap.to(cursorDot, { duration: 0.1, x: e.clientX, y: e.clientY }); 
+                }); 
+                hoverables.forEach(el => { 
+                    el.addEventListener('mouseenter', () => cursor.classList.add('hovered')); 
+                    el.addEventListener('mouseleave', () => cursor.classList.remove('hovered')); 
+                }); 
+            }
+            
             VanillaTilt.init(document.querySelectorAll(".tilt-card"), { max: 10, speed: 400, glare: true, "max-glare": 0.1 });
+            
             gsap.to("#video-parallax-bg", { scrollTrigger: { trigger: ".hero-video-container", start: "top top", end: "bottom top", scrub: 1 }, yPercent: 20, scale: 1.1 });
             gsap.to("#hero-content, .absolute.bottom-5, .scroll-down", { scrollTrigger: { trigger: ".hero-video-container", start: "top top", end: "bottom top", scrub: 1 }, yPercent: 50, opacity: 0 });
             gsap.to(".testimonial-track", { xPercent: -66.66, ease: "none", scrollTrigger: { trigger: "#testimonials", start: "top top", end: "+=1000", scrub: 1, pin: true, } });
-            const sections = document.querySelectorAll('section:not(.hero-video-container):not(#testimonials)'); sections.forEach(section => { gsap.from(section.children, { scrollTrigger: { trigger: section, start: "top 80%", toggleActions: "play none none none" }, opacity: 0, y: 50, duration: 1, stagger: 0.2, ease: 'power3.out' }); });
-            document.querySelectorAll('.counter').forEach(counter => { const target = +counter.getAttribute('data-target'); let counterObj = { value: 0 }; ScrollTrigger.create({ trigger: counter, start: "top 85%", once: true, onEnter: () => { gsap.to(counterObj, { duration: 2, value: target, ease: 'power2.out', onUpdate: () => { counter.textContent = Math.ceil(counterObj.value); } }); } }); });
-            const form = document.getElementById('subscribe-form'); if(form) { form.addEventListener('submit', function(e) { e.preventDefault(); const email = form.querySelector('input[type="email"]').value; const buttonText = form.querySelector('.button-text'); const buttonLoader = form.querySelector('.button-loader'); const feedback = document.getElementById('form-feedback'); buttonText.classList.add('hidden'); buttonLoader.classList.remove('hidden'); feedback.textContent = ''; setTimeout(() => { buttonText.classList.remove('hidden'); buttonLoader.classList.add('hidden'); if (email && email.includes('@')) { feedback.innerHTML = '<span class="text-green-400"><i class="fas fa-check-circle mr-2"></i>Success!</span>'; form.reset(); } else { feedback.innerHTML = '<span class="text-red-400"><i class="fas fa-exclamation-circle mr-2"></i>Invalid email.</span>'; } setTimeout(() => feedback.textContent = '', 5000); }, 1500); });}
+            
+            const sections = document.querySelectorAll('section:not(.hero-video-container):not(#testimonials)'); 
+            sections.forEach(section => { 
+                gsap.from(section.children, { 
+                    scrollTrigger: { trigger: section, start: "top 80%", toggleActions: "play none none none" }, 
+                    opacity: 0, y: 50, duration: 1, stagger: 0.2, ease: 'power3.out' 
+                }); 
+            });
+            
+            document.querySelectorAll('.counter').forEach(counter => { 
+                const target = +counter.getAttribute('data-target'); 
+                let counterObj = { value: 0 }; 
+                ScrollTrigger.create({ 
+                    trigger: counter, start: "top 85%", once: true, 
+                    onEnter: () => { 
+                        gsap.to(counterObj, { 
+                            duration: 2, value: target, ease: 'power2.out', 
+                            onUpdate: () => { counter.textContent = Math.ceil(counterObj.value); } 
+                        }); 
+                    } 
+                }); 
+            });
+            
+            // --- UPDATED FORM SUBMISSION LOGIC ---
+            const form = document.getElementById('subscribe-form');
+            if (form) {
+                form.addEventListener('submit', async function(e) {
+                    e.preventDefault();
+                    const buttonText = form.querySelector('.button-text');
+                    const buttonLoader = form.querySelector('.button-loader');
+                    const feedback = document.getElementById('form-feedback');
+                    
+                    const formData = {
+                        name: form.querySelector('input[name="name"]').value,
+                        email: form.querySelector('input[name="email"]').value
+                    };
+
+                    buttonText.classList.add('hidden');
+                    buttonLoader.classList.remove('hidden');
+                    feedback.textContent = '';
+
+                    try {
+                        const response = await fetch('/.netlify/functions/subscribe', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(formData)
+                        });
+
+                        const result = await response.json();
+
+                        if (!response.ok) {
+                            throw new Error(result.message || 'Something went wrong.');
+                        }
+
+                        feedback.innerHTML = `<span class="text-green-400"><i class="fas fa-check-circle mr-2"></i>Success! Welcome aboard.</span>`;
+                        form.reset();
+
+                    } catch (error) {
+                        console.error('Submission Error:', error);
+                        feedback.innerHTML = `<span class="text-red-400"><i class="fas fa-exclamation-circle mr-2"></i>${error.message}</span>`;
+                    } finally {
+                        buttonText.classList.remove('hidden');
+                        buttonLoader.classList.add('hidden');
+                        setTimeout(() => feedback.textContent = '', 6000);
+                    }
+                });
+            }
         });
     </script>
 </body>
