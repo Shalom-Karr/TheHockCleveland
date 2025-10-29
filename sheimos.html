@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en-US" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sheimos Information | The Hock Cleveland</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome for Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Vimeo Player API -->
+    <script src="https://player.vimeo.com/api/player.js"></script>
+    
+    <style>
+        :root { --orange-glow: 0 0 15px rgba(249, 115, 22, 0.5), 0 0 30px rgba(249, 115, 22, 0.3); }
+        body { font-family: 'Inter', sans-serif; background-color: #0a0a0a; color: #e5e7eb; cursor: none; }
+        .cursor { position: fixed; width: 20px; height: 20px; border-radius: 50%; background-color: white; mix-blend-mode: difference; pointer-events: none; transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s; z-index: 9999; }
+        .cursor.hovered { width: 50px; height: 50px; background-color: transparent; border: 2px solid white; }
+        .cursor-dot { position: fixed; width: 4px; height: 4px; background-color: white; border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); z-index: 9999; }
+        @media (max-width: 1024px) { .cursor, .cursor-dot { display: none; } body { cursor: auto; } }
+        .glass-header { background: rgba(10, 10, 10, 0.6); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
+        @media (max-width: 1024px) { .mobile-header.header-hidden { transform: translateY(-100%); } }
+        .aurora-bg { position: relative; overflow: hidden; }
+        .aurora-bg::before, .aurora-bg::after { content: ''; position: absolute; width: 800px; height: 800px; border-radius: 50%; filter: blur(150px); opacity: 0.15; z-index: 0; animation: drift 20s infinite alternate linear; }
+        .aurora-bg::before { background: radial-gradient(circle, #f97316, transparent 60%); top: -20%; left: -20%; }
+        .aurora-bg::after { background: radial-gradient(circle, #22c55e, transparent 60%); bottom: -20%; right: -20%; animation-delay: -10s; }
+        @keyframes drift { from { transform: rotate(0deg) translateX(50px) translateY(20px); } to { transform: rotate(360deg) translateX(-50px) translateY(-20px); } }
+    </style>
+</head>
+<body class="antialiased">
+
+    <div class="cursor"></div>
+    <div class="cursor-dot"></div>
+
+    <header id="header" class="glass-header mobile-header fixed lg:sticky top-0 left-0 right-0 z-50 transition-all duration-300">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <a href="index.html" class="flex items-center gap-3 group">
+                    <img src="https://thehockcleveland.myiqsolutionsllp.in/wp-content/uploads/2025/07/1000294271-e1760881282982.png" alt="Logo" class="h-16 w-16 bg-orange-500 rounded-full p-1 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
+                    <div class="hidden sm:block">
+                        <span class="text-xl font-bold text-gray-100">The Hock</span>
+                        <p class="text-xs text-gray-400 -mt-1">Know the latest in Cleveland</p>
+                    </div>
+                </a>
+                <nav class="hidden lg:flex items-center gap-6">
+                    <a href="index.html#about" class="text-gray-300 hover:text-white transition-colors font-medium">About</a>
+                    <!-- Style this link as "active" -->
+                    <a href="sheimos.html" class="text-white font-bold transition-colors">Sheimos Info</a>
+                    <a href="index.html#advertise" class="text-gray-300 hover:text-white transition-colors font-medium">Advertise</a>
+                </nav>
+                <div class="flex items-center gap-3">
+                    <a href="https://wa.me/8186299732?text=Hi!%20I%20would%20like%20to%20join%20the%20status" target="_blank" class="hidden sm:flex items-center gap-2 bg-green-500/10 border border-green-500/30 text-green-400 font-semibold px-4 py-2 rounded-full hover:bg-green-500/20 hover:text-white transition-all text-sm">
+                        <i class="fab fa-whatsapp"></i><span>Join on WhatsApp</span>
+                    </a>
+                    <button id="mobile-menu-button" class="lg:hidden text-2xl text-gray-300 hover:text-white transition-colors">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden lg:hidden bg-gray-900/95 backdrop-blur-sm absolute top-full left-0 w-full border-t border-white/10">
+            <nav class="flex flex-col p-4 gap-2">
+                <a href="index.html#about" class="text-gray-300 hover:bg-white/5 rounded-md py-2 px-3">About & Subscribe</a>
+                <a href="sheimos.html" class="text-white bg-white/10 rounded-md py-2 px-3">Sheimos Info</a>
+                <a href="index.html#advertise" class="text-gray-300 hover:bg-white/5 rounded-md py-2 px-3">Advertise</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- This section replaces the hero video with the styled content -->
+        <section class="aurora-bg py-24 lg:py-32">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <h1 class="text-4xl md:text-5xl font-bold text-center mb-16 text-orange-400">Sheimos Information</h1>
+
+                <!-- Content Block 1 -->
+                <div class="grid lg:grid-cols-2 gap-12 items-center mb-20">
+                    <div>
+                        <h2 class="text-2xl font-bold mb-4">Did you know that back in the day, they used a Gemara for hundreds of years?</h2>
+                        <p class="text-lg text-gray-400">
+                            When a city would get together once every few years to bury their precious and dear Seforim, the Tzaddikim and the community would come out and escort the Sheimos to burial. It is an <i>Eis Ratzon</i> and a special time to daven: ‘Just as we have pity on Hashem’s precious Torah, so too He should have <i>Rachmanus</i> on us.’
+                        </p>
+                    </div>
+                    <img src="https://thehockcleveland.com/wp-content/uploads/2025/10/1000221779.jpg" alt="Religious texts" class="rounded-lg shadow-lg w-full h-auto">
+                </div>
+
+                <!-- Content Block 2 -->
+                <div class="grid lg:grid-cols-2 gap-12 items-center mb-20">
+                    <div class="grid grid-cols-2 gap-4">
+                        <img src="https://thehockcleveland.com/wp-content/uploads/2025/10/1000221777-576x1024.jpg" alt="Sheimos burial process 1" class="rounded-lg shadow-lg">
+                        <img src="https://thehockcleveland.com/wp-content/uploads/2025/10/1000221781-669x1024.jpg" alt="Sheimos burial process 2" class="rounded-lg shadow-lg">
+                    </div>
+                    <div>
+                        <h2 class="text-2xl font-bold mb-4">When you give your Sheimos to The Hock Cleveland, you can rest assured that it is buried—and buried properly.</h2>
+                        <p class="text-lg text-gray-400 mb-4">
+                            Specifically, the whole process is transparent and pictures and videos are available of the Sheimos being buried under the correct amount of earth, and covered right away without being exposed to the natural elements. There are many other fascinating details that you can reach out to learn more.
+                        </p>
+                        <p class="text-lg text-gray-300 font-semibold">
+                            This is a very unique service and this process is only guaranteed when you give your Sheimos to The Hock Cleveland to bury.
+                        </p>
+                    </div>
+                </div>
+                
+                <!-- Content Block 3 -->
+                <div class="grid lg:grid-cols-2 gap-12 items-center">
+                    <div>
+                        <p class="text-lg text-gray-400 mb-6">
+                            Nowadays, there is more Sheimos than we know what to do with and we bury Seforim and papers that the previous generations would have wished they would have had. If we can all be more careful to realize that Sheimos isn’t ours; It’s Hashem’s holy Torah. And that we should try to be more mindful of that, hopefully Hashem will count that as a zchus and watch over us.
+                        </p>
+                        <div class="text-lg text-gray-300">
+                            <p>Reach out to <a href="mailto:shua@thehockcleveland.com" class="text-orange-400 hover:underline">shua@thehockcleveland.com</a></p>
+                            <p>Whatsapp/text/call <a href="tel:818-629-9732" class="text-orange-400 hover:underline">818-629-9732</a></p>
+                        </div>
+                    </div>
+                     <div class="grid grid-cols-2 gap-4">
+                        <img src="https://thehockcleveland.com/wp-content/uploads/2025/10/1000221780-663x1024.jpg" alt="Sheimos burial process 3" class="rounded-lg shadow-lg">
+                        <img src="https://thehockcleveland.com/wp-content/uploads/2025/10/1000221778-576x1024.jpg" alt="Sheimos burial process 4" class="rounded-lg shadow-lg">
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-black border-t border-white/10">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-8 text-center text-gray-400">
+            <p>&copy; 2025 The Hock Cleveland. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.27/bundled/lenis.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // --- LENIS SMOOTH SCROLL ---
+            const lenis = new Lenis();
+            function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+            requestAnimationFrame(raf);
+
+            // --- MOBILE MENU TOGGLE ---
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
+
+            // --- HEADER SCROLL EFFECT (Mobile Only) ---
+            let lastScroll = 0;
+            const header = document.getElementById('header');
+            window.addEventListener('scroll', () => { if (window.innerWidth <= 1024) { const currentScroll = window.pageYOffset; if (currentScroll > lastScroll && currentScroll > header.offsetHeight) { header.classList.add('header-hidden'); } else { header.classList.remove('header-hidden'); } lastScroll = currentScroll <= 0 ? 0 : currentScroll; } });
+
+            // --- CUSTOM CURSOR ---
+            if (window.innerWidth > 1024) { const cursor = document.querySelector('.cursor'); const cursorDot = document.querySelector('.cursor-dot'); const hoverables = document.querySelectorAll('a, button'); window.addEventListener('mousemove', e => { cursor.style.transform = `translate3d(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%), 0)`; cursorDot.style.transform = `translate3d(calc(${e.clientX}px - 50%), calc(${e.clientY}px - 50%), 0)`; }); hoverables.forEach(el => { el.addEventListener('mouseenter', () => cursor.classList.add('hovered')); el.addEventListener('mouseleave', () => cursor.classList.remove('hovered')); }); }
+        });
+    </script>
+</body>
+</html>
