@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-US"> <!-- Removed class="scroll-smooth" to avoid conflicts with Lenis -->
+<html lang="en-US">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,25 +16,31 @@
     <!-- Font Awesome for Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- Vimeo Player API -->
-    <script src="https://player.vimeo.com/api/player.js"></script>
+    <!-- REMOVED Vimeo Player API Script -->
     
     <style>
         :root { --orange-glow: 0 0 15px rgba(249, 115, 22, 0.5), 0 0 30px rgba(249, 115, 22, 0.3); }
         html.lenis { height: auto; }
         .lenis.lenis-smooth { scroll-behavior: auto !important; }
         .lenis.lenis-stopped { overflow: hidden; }
-        .lenis.lenis-scrolling iframe { pointer-events: none; }
+        .lenis.lenis-scrolling video { pointer-events: none; }
         body { font-family: 'Inter', sans-serif; background-color: #0a0a0a; color: #e5e7eb; cursor: none; }
         .cursor { position: fixed; width: 20px; height: 20px; border-radius: 50%; background-color: white; mix-blend-mode: difference; pointer-events: none; transform: translate(-50%, -50%); transition: width 0.3s, height 0.3s; z-index: 9999; }
         .cursor.hovered { width: 50px; height: 50px; background-color: transparent; border: 2px solid white; }
         .cursor-dot { position: fixed; width: 4px; height: 4px; background-color: white; border-radius: 50%; pointer-events: none; transform: translate(-50%, -50%); z-index: 9999; }
         @media (max-width: 1024px) { .cursor, .cursor-dot { display: none; } body { cursor: auto; } }
         .hero-video-container { position: relative; width: 100%; height: 85vh; overflow: hidden; }
-        .hero-video-container iframe { position: absolute; top: 50%; left: 50%; width: 100%; height: 100%; transform: translate(-50%, -50%); pointer-events: none; z-index: 1; opacity: 0; transition: opacity 1s ease-in-out; }
-        @media (min-aspect-ratio: 16/9) { .hero-video-container iframe { height: 56.25vw; } }
-        @media (max-aspect-ratio: 16/9) { .hero-video-container iframe { width: 177.78vh; } }
-        .hero-video-container iframe.loaded { opacity: 1; }
+        /* Style for the new <video> element */
+        .hero-video-container video {
+            position: absolute; top: 50%; left: 50%;
+            min-width: 100%; min-height: 100%;
+            width: auto; height: auto;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+        .hero-video-container video.loaded { opacity: 1; }
         .glass-header { background: rgba(10, 10, 10, 0.6); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(255, 255, 255, 0.1); }
         @media (max-width: 1024px) { .mobile-header.header-hidden { transform: translateY(-100%); } }
         .tilt-card { background: rgba(23, 23, 23, 0.6); border: 1px solid rgba(255, 255, 255, 0.1); transform-style: preserve-3d; transition: transform 0.5s, box-shadow 0.5s; }
@@ -105,9 +111,8 @@
     <main>
         <section class="hero-video-container">
             <div id="video-parallax-bg" class="absolute inset-0">
-                <img src="https://vumbnail.com/1122092442.jpg" alt="Cleveland skyline background" id="video-poster" class="absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 z-10">
-                <!-- FIX: Removed redundant allowfullscreen attribute -->
-                <iframe id="hero-vimeo-video" src="https://player.vimeo.com/video/1122092442?background=1&autoplay=1&loop=1&byline=0&title=0&muted=1" frameborder="0" allow="autoplay; fullscreen"></iframe>
+                <!-- NEW: Switched to HTML5 <video> element -->
+                <video id="hero-video" src="promo.mp4" autoplay loop muted playsinline></video>
             </div>
             <div class="absolute inset-0 bg-black/70 z-10"></div>
             
@@ -127,7 +132,7 @@
             <div class="scroll-down"><div class="mouse"></div></div>
         </section>
 
-        <!-- Rest of main content -->
+        <!-- Main content remains the same -->
         <section id="why-join" class="py-24 lg:py-32 aurora-bg">
             <div class="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div class="text-center mb-16">
@@ -225,59 +230,48 @@
             const mobileMenu = document.getElementById('mobile-menu');
             mobileMenuButton.addEventListener('click', () => { mobileMenu.classList.toggle('hidden'); });
             
-            // --- REFINED VIMEO & SOUND LOGIC ---
-            const iframe = document.querySelector('#hero-vimeo-video');
-            const player = new Vimeo.Player(iframe);
-            const poster = document.getElementById('video-poster');
+            // --- NEW, SIMPLIFIED VIDEO & SOUND LOGIC ---
+            const video = document.getElementById('hero-video');
             const volumeButton = document.getElementById('volume-toggle');
             const volumeIcon = document.getElementById('volume-icon');
             const unmutePrompt = document.getElementById('unmute-prompt');
-            let isMuted = true;
 
             // This function is the single source of truth for unmuting.
             const unmutePlayer = () => {
-                if (!isMuted) return; // Exit if already unmuted.
+                if (!video.muted) return; // Exit if already unmuted.
 
-                player.setVolume(1).then(() => {
-                    // This code only runs if the browser allows the unmute.
-                    isMuted = false;
-                    volumeIcon.className = 'fas fa-volume-high';
-                    unmutePrompt.style.opacity = 0;
-                    console.log('Player successfully unmuted.');
-                    // Clean up interaction listeners so they don't fire again.
-                    window.removeEventListener('scroll', handleFirstInteraction);
-                    window.removeEventListener('keydown', handleFirstInteraction);
-                }).catch(error => {
-                    console.error("Unmuting failed:", error);
-                });
+                video.muted = false;
+                volumeIcon.className = 'fas fa-volume-high';
+                unmutePrompt.style.opacity = 0;
+                console.log('Player successfully unmuted.');
+                // Clean up interaction listeners so they don't fire again.
+                window.removeEventListener('scroll', handleFirstInteraction);
+                window.removeEventListener('keydown', handleFirstInteraction);
+                window.removeEventListener('click', handleFirstInteraction);
             };
 
-            // This function is a wrapper for the first interaction.
             const handleFirstInteraction = () => {
                 unmutePlayer();
             };
 
-            // The manual button click logic.
             volumeButton.addEventListener('click', () => {
-                if (isMuted) {
-                    unmutePlayer(); // Attempt to unmute if it's the first interaction via the button.
+                if (video.muted) {
+                    unmutePlayer();
                 } else {
-                    // If already unmuted, just toggle mute.
-                    player.setMuted(true);
-                    isMuted = true;
+                    video.muted = true;
                     volumeIcon.className = 'fas fa-volume-mute';
                 }
             });
             
             // This event tells us the video is actually loaded and playing.
-            player.on('play', () => { 
-                poster.style.opacity = '0'; 
-                iframe.classList.add('loaded');
-                if (isMuted) unmutePrompt.style.opacity = 1;
+            video.addEventListener('playing', () => {
+                video.classList.add('loaded');
+                if (video.muted) unmutePrompt.style.opacity = 1;
                 
-                // Now that the video is playing, we can safely listen for other interactions.
+                // Now that the video is playing, we can safely listen for interactions.
                 window.addEventListener('scroll', handleFirstInteraction, { once: true });
                 window.addEventListener('keydown', handleFirstInteraction, { once: true });
+                window.addEventListener('click', handleFirstInteraction, { once: true });
             });
 
             // --- REST OF THE PAGE SCRIPT (unchanged) ---
