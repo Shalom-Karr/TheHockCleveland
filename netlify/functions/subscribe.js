@@ -4,7 +4,6 @@ const mailerlite = new MailerLite({
   api_key: process.env.MAILERLITE_API_KEY
 });
 
-// The Group ID must be a STRING, as confirmed by the API response.
 const GROUP_ID = "169569218509931738";
 
 exports.handler = async (event) => {
@@ -27,19 +26,24 @@ exports.handler = async (event) => {
       fields: {
         name: name || ''
       },
-      // --- FINAL FIX: Send the Group ID as a string ---
-      groups: [GROUP_ID], 
+      groups: [GROUP_ID],
       status: 'active',
     };
 
     const response = await mailerlite.subscribers.createOrUpdate(params);
+    
+    // --- NEW DIAGNOSTIC LOG ---
+    // Let's log the entire successful response body to see its structure.
+    console.log('MailerLite Success Response Body:', JSON.stringify(response, null, 2));
 
-    if (response.data && response.data.id) {
+    // Check for a successful response from the API
+    if (response && response.data && response.data.id) {
         return {
             statusCode: 200,
             body: JSON.stringify({ message: 'Success! You have been subscribed.' })
         };
     } else {
+        // This is the error that's being triggered.
         throw new Error('Subscriber creation failed for an unknown reason.');
     }
 
