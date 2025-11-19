@@ -37,6 +37,8 @@
         .preloader { position: fixed; inset: 0; background: #0a0a0a; z-index: 10000; display: flex; justify-content: center; align-items: center; flex-direction: column; }
         .preloader-text { font-size: 3rem; font-weight: 800; color: #fff; overflow: hidden; display: flex; gap: 0.2rem; }
         .preloader-text span { transform: translateY(100%); display: inline-block; }
+        /* Initial state for logo in JS */
+        #loader-logo { transform: translateY(100%); opacity: 0; }
 
         /* Hero & Layout */
         .hero-video-container { position: relative; width: 100%; height: 90vh; overflow: hidden; }
@@ -79,8 +81,13 @@
 </head>
 <body class="antialiased">
 
-    <!-- Cinematic Preloader -->
+    <!-- Cinematic Preloader with Logo -->
     <div class="preloader">
+        <!-- Logo Container -->
+        <div class="overflow-hidden mb-6 p-2">
+            <img src="logo.png" id="loader-logo" class="w-24 h-24 md:w-32 md:h-32 rounded-full shadow-[0_0_30px_rgba(249,115,22,0.4)] object-contain" alt="The Hock Logo">
+        </div>
+        <!-- Text -->
         <div class="preloader-text" id="loader-text">
             <span>T</span><span>H</span><span>E</span><span>&nbsp;</span><span>H</span><span>O</span><span>C</span><span>K</span>
         </div>
@@ -97,7 +104,6 @@
         <div class="container mx-auto px-4 sm:px-6 lg:px-8">
             <div class="flex items-center justify-between h-20">
                 <a href="index.html" class="flex items-center gap-3 group">
-                    <!-- LOGO UPDATED HERE -->
                     <img src="logo.png" alt="Logo" class="h-16 w-16 bg-orange-500 rounded-full p-1 shadow-lg transition-transform duration-300 group-hover:scale-110 group-hover:rotate-6">
                     <div class="hidden sm:block">
                         <span class="text-xl font-bold text-gray-100">The Hock</span>
@@ -268,50 +274,45 @@
             // --- 1. PRELOADER & HERO ENTRANCE ---
             const tlLoader = gsap.timeline();
             
-            // Animate letters up
-            tlLoader.to("#loader-text span", {
+            // 1a. Animate Logo Up and In
+            tlLoader.to("#loader-logo", {
+                y: 0,
+                opacity: 1,
+                duration: 1,
+                ease: "power4.out"
+            })
+            // 1b. Animate letters up (staggered, slightly overlapping logo)
+            .to("#loader-text span", {
                 y: 0,
                 duration: 1,
                 stagger: 0.1,
                 ease: "power4.out"
+            }, "-=0.5")
+            
+            // 2. Exit Sequence
+            .to("#loader-logo", {
+                y: -100,
+                opacity: 0,
+                duration: 0.8,
+                ease: "power2.in",
+                delay: 0.5 // Short pause
             })
             .to("#loader-text span", {
                 y: -100,
                 duration: 0.8,
                 stagger: 0.05,
-                ease: "power2.in",
-                delay: 0.5
-            })
+                ease: "power2.in"
+            }, "<") // Sync with logo exit
+
+            // 3. Curtain Lift
             .to(".preloader", {
                 yPercent: -100,
                 duration: 1,
                 ease: "power4.inOut"
-            }, "-=0.2");
+            }, "-=0.2")
 
-            // --- 2. HERO TEXT SPLIT (Vanilla JS) ---
-            const splitTargets = document.querySelectorAll('.split-animate');
-            splitTargets.forEach(target => {
-                const text = target.innerHTML.replace(/&amp;/g, '&'); // simple decode
-                // We need to preserve the inner span for "The Hock" coloring. 
-                // For simplicity in vanilla JS without plugins, we will split by word but keep HTML structure roughly.
-                // Actually, for this specific structure, let's grab the text content and wrap it manually.
-                // NOTE: Preserving the orange color span requires a slightly more complex parser, 
-                // but for a quick effect, let's animate the container or simple words.
-                
-                // Simplified word wrap logic to handle the span
-                const originalHTML = target.innerHTML;
-                // If we want to animate word by word, we have to parse carefully.
-                // For safety in this code block without external libraries like SplitText:
-                // We will animate the words "Want to be in on" then the Span, then "in Cleveland".
-            });
-            
-            // Cleaner approach for the H1 without breaking the orange span:
-            // We will animate the H1, P, and Buttons in a sequence after preloader.
-            
-            // Manual Split for the H1 just to show the effect on the whole line if not splitting words
-            // Or, let's just animate the elements nicely:
-            
-            tlLoader.from(".split-animate", {
+            // 4. Hero Elements Entrance
+            .from(".split-animate", {
                 y: 100,
                 opacity: 0,
                 duration: 1.2,
